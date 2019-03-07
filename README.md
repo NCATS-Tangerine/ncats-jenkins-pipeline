@@ -42,7 +42,7 @@ Ex:
 ```
  docker run -it \
   -p 3333:8080  \
-  -v `pwd`:/var/jenkins_home \
+  -v /my/host/folder:/var/jenkins_home \
   -v /var/run/docker.sock:/var/run/docker.sock \
   deepakunni3/ncats-jenkins 
 ```
