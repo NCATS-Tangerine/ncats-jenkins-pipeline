@@ -15,7 +15,7 @@ t.save('results/mondo.json')
 
 # parse hgnc.ttl
 t = HgncRdfTransformer()
-t.parse('data/hgnc.ttl')
+t.parse('data/hgnc_test.ttl')
 t = JsonTransformer(t)
 t.save('results/hgnc.json')
 
