@@ -24,17 +24,17 @@ pipeline {
 		}
 		stage('Data download') {
 			steps {
-
+				sh "echo 'Download necessary data'"
 			}
 		}
 		stage('Build the KG') {
 			steps {
-
+				sh "echo 'Parse the data using KGX'"
 			}
 		}
 		stage('Last stage') {
 			steps {
-
+				sh "echo 'Persist the KG by saving to a Neo4j/Triple Store/file'"
 			}
 		}
 	}
