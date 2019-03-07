@@ -22,24 +22,30 @@ pipeline {
 		}
 		stage('Data download') {
 			steps {
-				sh "echo 'Download necessary data'"
+				// Download ontology files
+				sh "wget http://purl.obolibrary.org/obo/mondo.owl -O data/mondo.owl"
+				sh "wget https://raw.githubusercontent.com/obophenotype/human-phenotype-ontology/master/hp.owl -O data/hp.owl"
+				sh "wget https://raw.githubusercontent.com/The-Sequence-Ontology/SO-Ontologies/master/so.owl -O data/so.owl"
+				// Download datasets
+				sh "wget https://archive.monarchinitiative.org/latest/ttl/hpoa_test.ttl -O data/hpoa_test.ttl"
+				sh "wget https://data.monarchinitiative.org/ttl/hgnc_test.ttl -O data/hgnc_test.ttl"
 			}
 		}
 		stage('Build the KG') {
 			steps {
-				sh "echo 'Parse the data using KGX'"
+				sh "python3.7 $WORKSPACE/kgx_run.py"
 			}
 		}
 		stage('Last stage') {
 			steps {
-				sh "echo 'Persist the KG by saving to a Neo4j/Triple Store/file'"
+				sh "ls -la results/"
 			}
 		}
 	}
 	post {
 		always {
 			// archive contents in results folder, only if the build is successful
-			//archiveArtifacts artifacts: 'results/*', onlyIfSuccessful: true
+			archiveArtifacts artifacts: '*', onlyIfSuccessful: true
 
 			// delete all created directories
 			deleteDir()
