@@ -14,10 +14,13 @@ pipeline {
 		stage('KGX checkout') {
 			steps {
 				sh "cd $WORKSPACE"
-				sh "git clone https://github.com/NCATS-tangerine/kgx.git kgx"
-				sh "cd $WORKSPACE/kgx && pip3.7 install ."
-				sh "mkdir $WORKSPACE/data"
-				sh "mkdir $WORKSPACE/results"
+				sh "pip install git+https://github.com/NCATS-Tangerine/kgx"
+				if (!fileExists('$WORKSPACE/data')) {
+					sh "mkdir $WORKSPACE/data"					
+				}
+				if (!fileExists('$WORKSPACE/data')) {
+					sh "mkdir $WORKSPACE/results"
+				}
 			}
 		}
 		stage('Data download') {
