@@ -36,7 +36,7 @@ t.parse('results/hpoa.json')
 
 # clique merge
 t.graph = clique_merge(t.graph)
-t.graph = make_valid_types(t.graph)
+make_valid_types(t.graph)
 
 # save as CSV
-t.save('results/clique_merged.csv')
+t.save('results/monarch.csv')
