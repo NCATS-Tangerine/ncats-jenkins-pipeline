@@ -14,8 +14,7 @@ pipeline {
 		stage('KGX checkout') {
 			steps {
 				sh "cd $WORKSPACE"
-				sh "git clone https://github.com/NCATS-tangerine/kgx.git kgx"
-				sh "cd $WORKSPACE/kgx && pip3.7 install ."
+				sh "pip3.6 install git+https://github.com/NCATS-tangerine/kgx.git"
 				sh "mkdir $WORKSPACE/data"
 				sh "mkdir $WORKSPACE/results"
 			}
@@ -33,7 +32,9 @@ pipeline {
 		}
 		stage('Build the KG') {
 			steps {
-				sh "python3.7 $WORKSPACE/scripts/kgx_run.py"
+				sh "python3.6 $WORKSPACE/scripts/kgx_run.py"
+				sh "python3.6 $WORKSPACE/scripts/download_red_kg.py"
+				sh "kgx merge results/red.csv.tar results/clique_merged.csv"
 			}
 		}
 		stage('Last stage') {
