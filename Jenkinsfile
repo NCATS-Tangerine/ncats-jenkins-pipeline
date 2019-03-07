@@ -11,10 +11,10 @@ pipeline {
 	}
 
 	stages {
-		stage('KGX checkout') {
+		stage('KGX installation') {
 			steps {
 				sh "cd $WORKSPACE"
-				sh "pip3.6 install git+https://github.com/NCATS-tangerine/kgx.git"
+				sh "pip3.7 install git+https://github.com/NCATS-tangerine/kgx.git"
 				sh "mkdir $WORKSPACE/data"
 				sh "mkdir $WORKSPACE/results"
 			}
@@ -30,11 +30,25 @@ pipeline {
 				sh "wget https://data.monarchinitiative.org/ttl/hgnc_test.ttl -O data/hgnc_test.ttl"
 			}
 		}
-		stage('Build the KG') {
+		stage('Build the Monarch KG') {
 			steps {
-				sh "python3.6 $WORKSPACE/scripts/kgx_run.py"
-				sh "python3.6 $WORKSPACE/scripts/download_red_kg.py"
-				sh "kgx merge results/red.csv.tar results/clique_merged.csv"
+				sh "python3.7 $WORKSPACE/scripts/kgx_run.py"
+			}
+		}
+		stage('Building the Red KG') {
+			steps {
+				sh "python3.7 $WORKSPACE/scripts/download_red_kg.py"
+			}
+		}
+		stage('Validate KG') {
+			steps {
+				sh "kgx validate results/clique_merged.csv.tar -o test/monarch/"
+				sh "kgx validate results/red.csv.tar -o test/red/"
+			}
+		}
+		stage('Merging the KG') {
+			steps {
+				sh "kgx merge results/red.csv.tar results/clique_merged.csv.tar"
 			}
 		}
 		stage('Last stage') {
