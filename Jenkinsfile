@@ -15,8 +15,6 @@ pipeline {
 			steps {
 				sh "cd $WORKSPACE"
 				sh "git clone https://github.com/NCATS-tangerine/kgx.git kgx"
-				sh "ls -la"
-				sh "ls -la kgx"
 				sh "cd $WORKSPACE/kgx && pip3.7 install ."
 				sh "mkdir $WORKSPACE/data"
 				sh "mkdir $WORKSPACE/results"
