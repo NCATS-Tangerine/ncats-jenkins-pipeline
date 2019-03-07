@@ -33,7 +33,7 @@ pipeline {
 		}
 		stage('Build the KG') {
 			steps {
-				sh "python3.7 $WORKSPACE/kgx_run.py"
+				sh "python3.7 $WORKSPACE/scripts/kgx_run.py"
 			}
 		}
 		stage('Last stage') {
