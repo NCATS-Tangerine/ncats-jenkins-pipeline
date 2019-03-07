@@ -39,12 +39,12 @@ pipeline {
 	post {
 		always {
 			// archive contents in results folder, only if the build is successful
-            archiveArtifacts artifacts: 'results/*', onlyIfSuccessful: true
+			//archiveArtifacts artifacts: 'results/*', onlyIfSuccessful: true
 
-            // delete all created directories
-            deleteDir()
+			// delete all created directories
+			deleteDir()
 
-            // clean workspace
+			// clean workspace
 			cleanWs()
 		}
 	}
