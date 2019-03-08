@@ -15,11 +15,13 @@ pipeline {
 			steps {
 				sh "cd $WORKSPACE"
 				sh "pip install git+https://github.com/NCATS-Tangerine/kgx"
-				if (!fileExists('$WORKSPACE/data')) {
-					sh "mkdir $WORKSPACE/data"					
-				}
-				if (!fileExists('$WORKSPACE/data')) {
-					sh "mkdir $WORKSPACE/results"
+				script {
+					if (!fileExists('$WORKSPACE/data')) {
+						sh "mkdir $WORKSPACE/data"
+					}
+					if (!fileExists('$WORKSPACE/data')) {
+						sh "mkdir $WORKSPACE/results"
+					}
 				}
 			}
 		}
