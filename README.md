@@ -22,5 +22,6 @@ docker run -it --name jenkins-translator \
 ### Improvements
 
 * Use Dockerized version of ShEx validation
+* Output validation errors in a file
 * Make it more generic, to be able to compute statistics from any Translator data source (Reasoner API, Beacon API, KGX, Neo4j...)
 * Avoid the need to use 2 different URLs for rdf4j triplestores (where we need to add `/statements` to udate). PyShEx should be able to log given username and password
