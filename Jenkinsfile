@@ -63,10 +63,10 @@ pipeline {
 			archiveArtifacts artifacts: '*', onlyIfSuccessful: true
 
 			// delete all created directories
-			//deleteDir()
+			deleteDir()
 
 			// clean workspace
-			//cleanWs()
+			cleanWs()
 		}
 	}
 }
