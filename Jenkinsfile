@@ -42,13 +42,13 @@ pipeline {
 		}
 		stage('Validate KG') {
 			steps {
-				sh "kgx validate results/clique_merged.csv.tar -o test/monarch/"
+				sh "kgx validate results/monarch.csv.tar -o test/monarch/"
 				sh "kgx validate results/red.csv.tar -o test/red/"
 			}
 		}
 		stage('Merging the KG') {
 			steps {
-				sh "kgx merge results/red.csv.tar results/clique_merged.csv.tar"
+				sh "kgx merge results/red.csv.tar results/monarch.csv.tar"
 			}
 		}
 		stage('Last stage') {
