@@ -39,4 +39,5 @@ t.graph = clique_merge(t.graph)
 make_valid_types(t.graph)
 
 # save as CSV
-t.save('results/clique_merged.csv')
+csv_transformer = PandasTransformer(t)
+csv_transformer.save('results/clique_merged.csv')
