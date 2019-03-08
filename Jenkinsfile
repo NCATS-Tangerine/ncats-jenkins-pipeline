@@ -1,56 +1,48 @@
 pipeline {
-	agent any
+  agent any
 
-	environment {
-		KGX_GIT='https://github.com/NCATS-tangerine/kgx.git'
-		PYTHONPATH='$WORKSPACE/kgx'
-	}
-	options {
-		// using the timestamps plugin we can add timestamps to the console log
-		timestamps()
-	}
+  parameters {
+    string(name: 'GraphUri', defaultValue: 'https://w3id.org/data2services/graph/biolink/date', description: 'URI of the Graph to validate')
+    string(name: 'UpdateRepositoryUri', defaultValue: 'http://graphdb.dumontierlab.com/repositories/public/statements', description: 'URI of the repository used to insert the computed statistics')
+    string(name: 'ValidateRepositoryUri', defaultValue: 'http://graphdb.dumontierlab.com/repositories/public', description: 'URI of the repository used to validate the graph using PyShEx')
+    string(name: 'TriplestoreUsername', defaultValue: 'import_user', description: 'Username for the triplestore')
+    string(name: 'TriplestorePassword', defaultValue: 'changeme', description: 'Password for the triplestore')
+  }
 
-	stages {
-		stage('KGX checkout') {
-			steps {
-				sh "cd $WORKSPACE"
-				sh "pip3.7 install git+https://github.com/NCATS-Tangerine/kgx"
-				script {
-					if (!fileExists('$WORKSPACE/data')) {
-						sh "mkdir $WORKSPACE/data"
-					}
-					if (!fileExists('$WORKSPACE/data')) {
-						sh "mkdir $WORKSPACE/results"
-					}
-				}
-			}
-		}
-		stage('Data download') {
-			steps {
-				sh "echo 'Download necessary data'"
-			}
-		}
-		stage('Build the KG') {
-			steps {
-				sh "echo 'Parse the data using KGX'"
-			}
-		}
-		stage('Last stage') {
-			steps {
-				sh "echo 'Persist the KG by saving to a Neo4j/Triple Store/file'"
-			}
-		}
-	}
-	post {
-		always {
-			// archive contents in results folder, only if the build is successful
-			//archiveArtifacts artifacts: 'results/*', onlyIfSuccessful: true
+  stages {
+    stage('Build and install') {
+      steps {
+        sh "git clone --recursive https://github.com/vemonet/data2services-insert.git"
+        sh 'docker build --rm -f "$WORKSPACE/data2services-insert/rdf4j-sparql-operations/Dockerfile" -t rdf4j-sparql-operations:latest $WORKSPACE/data2services-insert/rdf4j-sparql-operations'
+        sh 'pip3.7 install pyshex'
+      }
+    }
 
-			// delete all created directories
-			deleteDir()
+    stage('Compute and insert statistics') {
+      steps {
+        sh "docker run -t --rm --volumes-from jenkins-translator rdf4j-sparql-operations -rq '$WORKSPACE/data2services-insert/compute-statistics' -url '${params.UpdateRepositoryUri}' -un ${params.TriplestoreUsername} -pw ${params.TriplestorePassword} -var inputGraph:${params.GraphUri}"
+      }
+    }
 
-			// clean workspace
-			cleanWs()
-		}
-	}
+    stage('ShEx validation') {
+      steps {
+        sh "shexeval -gn '' -ss -ut -sq 'select distinct ?item from <${params.GraphUri}> where{?item a <http://w3id.org/biolink/vocab/Gene>} LIMIT 100' ${params.ValidateRepositoryUri} https://github.com/biolink/biolink-model/raw/master/shex/biolink-modelnc.shex > shex_validation.txt"
+      }
+    }
+
+    /*stage('RDFUnit') {
+      steps {
+        sh 'docker run --rm -t --volumes-from jenkins-translator -v /data/translator:/data dqa-rdfunit  -o ttl -d "http://graphdb.dumontierlab.com/repositories/ncats-red-kg" \
+        -e "http://graphdb.dumontierlab.com/repositories/ncats-red-kg" -f "$WORKSPACE/rdfunit" -s "https://raw.githubusercontent.com/biolink/biolink-model/master/ontology/biolink.ttl" -g "https://w3id.org/data2services/graph/biolink/date"'
+      }
+    }*/
+
+  }
+  post {
+    always {
+      //archiveArtifacts artifacts: 'results/*', onlyIfSuccessful: true // archive contents in results folder
+      deleteDir()
+      cleanWs()
+    }
+  }
 }
