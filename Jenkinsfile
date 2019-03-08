@@ -30,14 +30,14 @@ pipeline {
 				sh "wget --no-clobber https://data.monarchinitiative.org/ttl/hgnc_test.ttl -O data/hgnc_test.ttl || true"
 			}
 		}
-		stage('Build the Monarch KG') {
-			steps {
-				sh "python3.7 $WORKSPACE/scripts/kgx_run.py"
-			}
-		}
 		stage('Building the Red KG') {
 			steps {
 				sh "python3.7 $WORKSPACE/scripts/download_red_kg.py"
+			}
+		}
+		stage('Build the Monarch KG') {
+			steps {
+				sh "python3.7 $WORKSPACE/scripts/kgx_run.py"
 			}
 		}
 		stage('Validate KG') {
