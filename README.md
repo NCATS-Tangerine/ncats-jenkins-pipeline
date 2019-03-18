@@ -46,3 +46,7 @@ Ex:
   -v /var/run/docker.sock:/var/run/docker.sock \
   deepakunni3/ncats-jenkins 
 ```
+
+#### Setting up a new Jenkins Pipeline
+
+First, go to the Credentials page and create new credentials with the kind `username with password`, set the username to your GitHub username and the password to your GitHub password. Now create a new item. Give it a name and select "Multibranch Pipeline". Then, in the "Banch Source" section select "Add Sorce" and choose GitHub. Enter `NCATS-Tangerine` as the owner and `ncats-kg-release-pipeline` as the repository, and select the credentials you previously created. Then press Save and you're done.
