@@ -26,8 +26,8 @@ pipeline {
 				sh "wget --no-clobber https://raw.githubusercontent.com/obophenotype/human-phenotype-ontology/master/hp.owl -O data/hp.owl || true"
 				sh "wget --no-clobber https://raw.githubusercontent.com/The-Sequence-Ontology/SO-Ontologies/master/so.owl -O data/so.owl || true"
 				// Download datasets
-				sh "wget --no-clobber https://archive.monarchinitiative.org/latest/ttl/hpoa_test.ttl -O data/hpoa_test.ttl || true"
-				sh "wget --no-clobber https://data.monarchinitiative.org/ttl/hgnc_test.ttl -O data/hgnc_test.ttl || true"
+				sh "wget --no-clobber https://archive.monarchinitiative.org/latest/ttl/hpoa.ttl -O data/hpoa.ttl || true"
+				sh "wget --no-clobber https://data.monarchinitiative.org/ttl/hgnc.ttl -O data/hgnc.ttl || true"
 			}
 		}
 		stage('Building the Red KG') {
