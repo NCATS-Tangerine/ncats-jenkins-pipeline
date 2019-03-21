@@ -62,6 +62,8 @@ Copy and paste that password, here it is `557d82bb01cb4279bcf4eb4089fb312c`, and
 
 Then select the "select plugins to install" option. Unselect the "Folders" option, and then scroll down to find the "GitHub" option and select it. Then click Install. Then continue through the set up, choosing your username and password and so on. Eventually you will arrive at a page welcoming you to Jenkins and prompting you to create new jobs.
 
+But first let's configure Jenkins to allow other users to create accounts. On the side click "Manage Jenkins" and then "Configure Global Security". Select "Allow users to sign up" and save.
+
 #### Setting up a new Jenkins Pipeline
 
 First, go to the Credentials page and create new credentials with the kind `username with password`, set the username to your GitHub username and the password to your GitHub password. Now create a new item. Give it a name and select "Multibranch Pipeline". Then, in the "Banch Source" section select "Add Sorce" and choose GitHub. Enter `NCATS-Tangerine` as the owner and `ncats-kg-release-pipeline` as the repository, and select the credentials you previously created. Then press Save and you're done.
