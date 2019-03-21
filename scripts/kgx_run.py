@@ -15,15 +15,15 @@ t.save('results/mondo.json')
 
 # parse hgnc.ttl
 t = HgncRdfTransformer()
-t.parse('data/hgnc_test.ttl')
+t.parse('data/hgnc.ttl')
 t = JsonTransformer(t)
 t.save('results/hgnc.json')
 
-# parse hpoa_test.ttl
+# parse hpoa.ttl
 t = ObanRdfTransformer()
 t.add_ontology('data/mondo.owl')
 t.add_ontology('data/hp.owl')
-t.parse('data/hpoa_test.ttl')
+t.parse('data/hpoa.ttl')
 t = JsonTransformer(t)
 t.save('results/hpoa.json')
 
