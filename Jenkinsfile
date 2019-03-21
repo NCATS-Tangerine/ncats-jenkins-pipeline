@@ -14,7 +14,7 @@ pipeline {
 		stage('KGX installation') {
 			steps {
 				sh "cd $WORKSPACE"
-				sh "pip3.7 install git+https://github.com/NCATS-tangerine/kgx.git"
+				sh "pip3.7 install --no-cache-dir --upgrade git+https://github.com/NCATS-tangerine/kgx.git"
 				sh "mkdir -p $WORKSPACE/data"
 				sh "mkdir -p $WORKSPACE/results"
 			}
