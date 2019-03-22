@@ -21,6 +21,7 @@ pipeline {
 		}
 		stage('Data download') {
 			steps {
+				sh "ls -la data/"
 				// Download ontology files
 				sh "wget --no-clobber http://purl.obolibrary.org/obo/mondo.owl -O data/mondo.owl || true"
 				sh "wget --no-clobber https://raw.githubusercontent.com/obophenotype/human-phenotype-ontology/master/hp.owl -O data/hp.owl || true"
@@ -63,10 +64,10 @@ pipeline {
 			archiveArtifacts artifacts: '*', onlyIfSuccessful: true
 
 			// delete all created directories
-			deleteDir()
+			//deleteDir()
 
 			// clean workspace
-			cleanWs()
+			//cleanWs()
 		}
 	}
 }
