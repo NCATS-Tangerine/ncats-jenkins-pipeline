@@ -49,7 +49,7 @@ pipeline {
 		}
 		stage('Merging the KG') {
 			steps {
-				sh "kgx merge results/red.csv.tar results/monarch.csv.tar -o results/merged.csv"
+				sh "kgx merge -i results/red.csv.tar -i results/monarch.csv.tar -o results/merged.csv"
 			}
 		}
 		stage('Last stage') {
