@@ -23,33 +23,17 @@ pipeline {
 			steps {
 				sh "ls -la data/"
 				// Download ontology files
-				sh "wget --no-clobber http://purl.obolibrary.org/obo/mondo.owl -O data/mondo.owl || true"
-				sh "wget --no-clobber https://raw.githubusercontent.com/obophenotype/human-phenotype-ontology/master/hp.owl -O data/hp.owl || true"
-				sh "wget --no-clobber https://raw.githubusercontent.com/The-Sequence-Ontology/SO-Ontologies/master/so.owl -O data/so.owl || true"
-				// Download datasets
-				sh "wget --no-clobber https://archive.monarchinitiative.org/latest/ttl/hpoa.ttl -O data/hpoa.ttl || true"
-				sh "wget --no-clobber https://data.monarchinitiative.org/ttl/hgnc.ttl -O data/hgnc.ttl || true"
+				sh "make download"
 			}
 		}
-		stage('Building the Red KG') {
+		stage('Building the Monarch KG') {
 			steps {
-				sh "python3.7 $WORKSPACE/scripts/download_red_kg.py"
-			}
-		}
-		stage('Build the Monarch KG') {
-			steps {
-				sh "python3.7 $WORKSPACE/scripts/kgx_run.py"
+				sh "python3.7 $WORKSPACE/scripts/monarch_build.py"
 			}
 		}
 		stage('Validate KG') {
 			steps {
 				sh "kgx validate results/monarch.csv.tar -o test/monarch/"
-				sh "kgx validate results/red.csv.tar -o test/red/"
-			}
-		}
-		stage('Merging the KG') {
-			steps {
-				sh "kgx merge results/red.csv.tar results/monarch.csv.tar -o results/merged.csv"
 			}
 		}
 		stage('Last stage') {
