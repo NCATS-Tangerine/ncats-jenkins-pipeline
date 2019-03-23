@@ -30,7 +30,7 @@ pipeline {
 
     stage('RdfUpload') {
       steps {
-        sh "docker run -t --rm -v /data/rdfu:/data rdf-upload -if '${params.InputFile}.nq.gz' -url '${params.TriplestoreUri}' -rep '${params.TriplestoreRepository}' -un '${params.TriplestoreUsername}' -pw '${params.TriplestorePassword}'"
+        sh "docker run -t --rm --volumes-from jenkins-translator rdf-upload -if '${params.InputFile}.nq.gz' -url '${params.TriplestoreUri}' -rep '${params.TriplestoreRepository}' -un '${params.TriplestoreUsername}' -pw '${params.TriplestorePassword}'"
       }
     }
 
