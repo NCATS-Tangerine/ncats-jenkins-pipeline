@@ -30,9 +30,10 @@ pipeline {
       }
     }
 
-    stage('xml2rdf') {
+    /*stage('Process XML files') {
       steps {
-        sh "docker run -t --rm --volumes-from jenkins-translator xml2rdf --inputfile '${params.InputFile}' --outputfile '${params.InputFile}.nq.gz' --graphuri ${params.GraphUri}"
+        files = findFiles(glob: '*.xml.gz')
+        process_file(files)
       }
     }
 
@@ -40,7 +41,7 @@ pipeline {
       steps {
         sh "docker run -t --rm --volumes-from jenkins-translator rdf-upload -if '${params.InputFile}.nq.gz' -url '${params.TriplestoreUri}' -rep '${params.TriplestoreRepository}' -un '${params.TriplestoreUsername}' -pw '${params.TriplestorePassword}'"
       }
-    }
+    }*/
 
   }
   post {
@@ -50,4 +51,13 @@ pipeline {
       cleanWs()
     }
   }
+}
+
+@NonCPS // has to be NonCPS or the build breaks on the call to .each
+def process_file(list) {
+    list.each { file ->
+        echo "Processing file: ${file}"
+        sh "docker run -t --rm --volumes-from jenkins-translator xml2rdf --inputfile '${file}' --outputfile '${file}.nq.gz' --graphuri ${params.GraphUri}"
+        sh "docker run -t --rm --volumes-from jenkins-translator rdf-upload -if '${file}.nq.gz' -url '${params.TriplestoreUri}' -rep '${params.TriplestoreRepository}' -un '${params.TriplestoreUsername}' -pw '${params.TriplestorePassword}'"
+    }
 }
