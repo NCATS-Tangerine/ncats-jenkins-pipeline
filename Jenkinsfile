@@ -24,7 +24,7 @@ pipeline {
 
     stage('xml2rdf') {
       steps {
-        sh "docker run -t --rm --volumes-from jenkins-translator xml2rdf --inputfile '${params.InputFile}' --outputfile '${params.InputFile}.nq.gz' --graphuri ${params.GraphUri}"
+        sh "docker run -t --rm --volumes-from jenkins-translator xml2rdf --inputfile '${params.InputFile}' --outputfile '${params.InputFile}.nq' --graphuri ${params.GraphUri}"
       }
     }
 
