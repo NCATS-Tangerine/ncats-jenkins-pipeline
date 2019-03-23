@@ -12,21 +12,17 @@ pipeline {
   stages {
     stage('Build and install') {
       steps {
-        sh "git clone --recursive https://github.com/vemonet/data2services-insert.git"
-        sh 'docker build --rm -f "$WORKSPACE/data2services-insert/rdf4j-sparql-operations/Dockerfile" -t rdf4j-sparql-operations:latest $WORKSPACE/data2services-insert/rdf4j-sparql-operations'
-        sh 'pip3.7 install pyshex'
+        sh 'git clone --recursive https://github.com/MaastrichtU-IDS/data2services-pipeline'
+        sh 'docker build -t xml2rdf ./data2services/xml2rdf'
+        //sh 'docker build -t rdf-upload ./data2services/RdfUpload'
+        //sh 'docker build -t rdf4j-sparql-operations ./data2services/rdf4j-sparql-operations'
+        //sh './data2services-pipeline/build.sh'
       }
     }
 
-    stage('Compute and insert statistics') {
+    stage('xml2rdf') {
       steps {
-        sh "docker run -t --rm --volumes-from jenkins-translator rdf4j-sparql-operations -rq '$WORKSPACE/data2services-insert/compute-statistics' -url '${params.UpdateRepositoryUri}' -un ${params.TriplestoreUsername} -pw ${params.TriplestorePassword} -var inputGraph:${params.GraphUri}"
-      }
-    }
-
-    stage('ShEx validation') {
-      steps {
-        sh "shexeval -gn '' -ss -ut -sq 'select distinct ?item from <${params.GraphUri}> where{?item a <http://w3id.org/biolink/vocab/Gene>} LIMIT 100' ${params.ValidateRepositoryUri} https://github.com/biolink/biolink-model/raw/master/shex/biolink-modelnc.shex > shex_validation.txt"
+        sh "docker run -t --rm --volumes-from jenkins-translator xml2rdf -f '/data' -ep '${params.UpdateRepositoryUri}' -un ${params.TriplestoreUsername} -pw ${params.TriplestorePassword}"
       }
     }
 

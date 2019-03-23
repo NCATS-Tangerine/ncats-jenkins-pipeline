@@ -1,4 +1,4 @@
-# red-kg-validation pipeline
+# red-kg-load-pubmed pipeline
 
 First version of a pipeline to validate the ncats-red-kg and compute [HCLS](https://www.w3.org/TR/hcls-dataset/#s6_6) statistics.
 
