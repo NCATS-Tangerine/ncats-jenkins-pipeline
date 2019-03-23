@@ -32,7 +32,7 @@ pipeline {
 
     stage('Process XML files') {
       steps {
-        def files = findFiles(glob: '*.xml.gz')
+        get_files()
         process_file(files)
       }
     }
@@ -51,6 +51,11 @@ pipeline {
       cleanWs()
     }
   }
+}
+
+@NonCPS
+def get_files() {
+  def files = findFiles(glob: '*.xml.gz')
 }
 
 @NonCPS // has to be NonCPS or the build breaks on the call to .each
