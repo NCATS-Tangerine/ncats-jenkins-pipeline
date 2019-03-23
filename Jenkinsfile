@@ -16,7 +16,7 @@ pipeline {
         sh 'git clone --recursive https://github.com/MaastrichtU-IDS/data2services-pipeline'
         sh 'docker build --rm -f "$WORKSPACE/data2services-pipeline/xml2rdf/Dockerfile" -t xml2rdf:latest $WORKSPACE/data2services-pipeline/xml2rdf'
         //sh "docker build --rm -t xml2rdf ${env.WORKSPACE}/data2services-pipeline/xml2rdf"
-        sh 'docker build -t rdf-upload ./data2services/RdfUpload'
+        sh 'docker build --rm -t rdf-upload $WORKSPACE/data2services-pipeline/RdfUpload'
         //sh 'docker build -t rdf4j-sparql-operations ./data2services/rdf4j-sparql-operations'
         //sh './data2services-pipeline/build.sh'
       }
