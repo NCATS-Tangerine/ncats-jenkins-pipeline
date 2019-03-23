@@ -32,7 +32,7 @@ pipeline {
 
     stage('Process XML files') {
       steps {
-        files = findFiles(glob: '*.xml.gz')
+        def files = findFiles(glob: '*.xml.gz')
         process_file(files)
       }
     }
