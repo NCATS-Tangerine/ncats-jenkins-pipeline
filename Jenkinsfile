@@ -30,14 +30,14 @@ pipeline {
       }
     }
 
-    /*stage('Process XML files') {
+    stage('Process XML files') {
       steps {
         files = findFiles(glob: '*.xml.gz')
         process_file(files)
       }
     }
 
-    stage('RdfUpload') {
+    /*stage('RdfUpload') {
       steps {
         sh "docker run -t --rm --volumes-from jenkins-translator rdf-upload -if '${params.InputFile}.nq.gz' -url '${params.TriplestoreUri}' -rep '${params.TriplestoreRepository}' -un '${params.TriplestoreUsername}' -pw '${params.TriplestorePassword}'"
       }
