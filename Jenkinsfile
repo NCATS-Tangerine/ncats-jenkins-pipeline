@@ -2,9 +2,9 @@ pipeline {
   agent any
 
   parameters {
-    string(name: 'GraphUri', defaultValue: 'https://w3id.org/data2services/graph/biolink/date', description: 'URI of the Graph to validate')
-    string(name: 'UpdateRepositoryUri', defaultValue: 'http://graphdb.dumontierlab.com/repositories/public/statements', description: 'URI of the repository used to insert the computed statistics')
-    string(name: 'ValidateRepositoryUri', defaultValue: 'http://graphdb.dumontierlab.com/repositories/public', description: 'URI of the repository used to validate the graph using PyShEx')
+    string(name: 'GraphUri', defaultValue: 'https://w3id.org/data2services/graph/xml2rdf/pubmed', description: 'URI of the Graph to load')
+    string(name: 'FinalSparqlRepositoryUri', defaultValue: 'http://graphdb.dumontierlab.com/repositories/public/statements', description: 'URI of the repository used to insert the transformed RDF.')
+    string(name: 'BufferSparqlRepositoryUri', defaultValue: 'http://graphdb.dumontierlab.com/repositories/public/statements', description: 'URI of the repository used to validate the graph using PyShEx')
     string(name: 'TriplestoreUsername', defaultValue: 'import_user', description: 'Username for the triplestore')
     string(name: 'TriplestorePassword', defaultValue: 'changeme', description: 'Password for the triplestore')
   }
@@ -13,7 +13,7 @@ pipeline {
     stage('Build and install') {
       steps {
         sh 'git clone --recursive https://github.com/MaastrichtU-IDS/data2services-pipeline'
-        sh 'docker build -t xml2rdf ./data2services/xml2rdf'
+        sh 'docker build -t xml2rdf $WORKSPACE/data2services/xml2rdf'
         //sh 'docker build -t rdf-upload ./data2services/RdfUpload'
         //sh 'docker build -t rdf4j-sparql-operations ./data2services/rdf4j-sparql-operations'
         //sh './data2services-pipeline/build.sh'
@@ -22,7 +22,7 @@ pipeline {
 
     stage('xml2rdf') {
       steps {
-        sh "docker run -t --rm --volumes-from jenkins-translator xml2rdf -f '/data' -ep '${params.UpdateRepositoryUri}' -un ${params.TriplestoreUsername} -pw ${params.TriplestorePassword}"
+        sh "docker run -t --rm --volumes-from jenkins-translator xml2rdf -f '/var/jenkins_home/pubmed/pubmed18n0001.xml.gz' -ep '${params.FinalSparqlRepositoryUri}' -un ${params.TriplestoreUsername} -pw ${params.TriplestorePassword}"
       }
     }
 
