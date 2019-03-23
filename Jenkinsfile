@@ -28,12 +28,6 @@ pipeline {
       }
     }
 
-    stage('xml2rdf') {
-      steps {
-        sh "docker run -t --rm --volumes-from jenkins-translator xml2rdf --inputfile '${params.InputFile}' --outputfile '${params.InputFile}.nq.gz' --graphuri ${params.GraphUri}"
-      }
-    }
-
     stage('RdfUpload') {
       steps {
         sh "docker run -it --rm -v /data/rdfu:/data rdf-upload -if '${params.InputFile}.nq.gz' -url '${params.TriplestoreUri}' -rep '${params.TriplestoreRepository}' -un '${params.TriplestoreUsername}' -pw '${params.TriplestorePassword}'"
