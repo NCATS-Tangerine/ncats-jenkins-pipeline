@@ -13,7 +13,7 @@ pipeline {
     stage('Build and install') {
       steps {
         sh 'git clone --recursive https://github.com/MaastrichtU-IDS/data2services-pipeline'
-        sh "docker build --rm -t xml2rdf ${env.WORKSPACE}/data2services/xml2rdf"
+        sh "docker build --rm -t xml2rdf ${env.WORKSPACE}/data2services-pipeline/xml2rdf"
         //sh 'docker build -t rdf-upload ./data2services/RdfUpload'
         //sh 'docker build -t rdf4j-sparql-operations ./data2services/rdf4j-sparql-operations'
         //sh './data2services-pipeline/build.sh'
@@ -22,7 +22,7 @@ pipeline {
 
     stage('xml2rdf') {
       steps {
-        sh "docker run -t --rm --volumes-from jenkins-translator xml2rdf -f '/var/jenkins_home/pubmed/pubmed18n0001.xml.gz' -ep '${params.FinalSparqlRepositoryUri}' -un ${params.TriplestoreUsername} -pw ${params.TriplestorePassword}"
+        sh "docker run -t --rm --volumes-from jenkins-translator xml2rdf -f '/data/pubmed/pubmed18n0001.xml.gz' -ep '${params.FinalSparqlRepositoryUri}' -un ${params.TriplestoreUsername} -pw ${params.TriplestorePassword}"
       }
     }
 
