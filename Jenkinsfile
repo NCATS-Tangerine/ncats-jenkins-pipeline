@@ -32,16 +32,17 @@ pipeline {
 
     stage('Process XML files') {
       steps {
-        get_files()
-        process_file(files)
+        //get_files()
+        //process_file(files)
+        sh "docker run -t --rm --volumes-from jenkins-translator xml2rdf --inputfile '${params.InputFile}' --outputfile '${params.InputFile}.nq.gz' --graphuri ${params.GraphUri}"
       }
     }
 
-    /*stage('RdfUpload') {
+    stage('RdfUpload') {
       steps {
         sh "docker run -t --rm --volumes-from jenkins-translator rdf-upload -if '${params.InputFile}.nq.gz' -url '${params.TriplestoreUri}' -rep '${params.TriplestoreRepository}' -un '${params.TriplestoreUsername}' -pw '${params.TriplestorePassword}'"
       }
-    }*/
+    }
 
   }
   post {
@@ -53,6 +54,7 @@ pipeline {
   }
 }
 
+// Not used at the moment
 @NonCPS
 def get_files() {
   def files = findFiles(glob: '*.xml.gz')
