@@ -64,5 +64,7 @@ def process_file(list) {
         echo "Processing file: ${file}"
         sh "docker run -t --rm --volumes-from jenkins-translator xml2rdf --inputfile '${file}' --outputfile '${file}.nq.gz' --graphuri ${params.GraphUri}"
         sh "docker run -t --rm --volumes-from jenkins-translator rdf-upload -if '${file}.nq.gz' -url '${params.TriplestoreUri}' -rep '${params.TriplestoreRepository}' -un '${params.TriplestoreUsername}' -pw '${params.TriplestorePassword}'"
+        // Then execute data2services-insert BioLink SPARQL queries
+        // Delete the temp graph using rdf4j-sparql-operations
     }
 }
