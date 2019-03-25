@@ -8,6 +8,7 @@ pipeline {
     string(name: 'TriplestoreRepository', defaultValue: 'test_vincent', description: 'URI of the repository used to validate the graph using PyShEx')
     string(name: 'TriplestoreUsername', defaultValue: 'import_user', description: 'Username for the triplestore')
     string(name: 'TriplestorePassword', defaultValue: 'changeme', description: 'Password for the triplestore')
+    string(name: 'JenkinsContainer', defaultValue: 'jenkins', description: 'Name of the Jenkins Docker container')
   }
 
   stages {
@@ -25,7 +26,8 @@ pipeline {
 
     stage('data2services-download') {
       steps {
-        sh "docker run -t --rm --volumes-from jenkins-translator data2services-download --download-datasets pubmed-sample --working-path /var/jenkins_home/pubmed"
+        sh 'mkdir -p /data/pubmed'
+        sh "docker run -t --rm --volumes-from ${params.JenkinsContainer} data2services-download --download-datasets pubmed-sample --working-path /data/pubmed"
         // TODO: iterate on files downloaded here
       }
     }
@@ -34,13 +36,13 @@ pipeline {
       steps {
         //get_files()
         //process_file(files)
-        sh "docker run -t --rm --volumes-from jenkins-translator xml2rdf --inputfile '${params.InputFile}' --outputfile '${params.InputFile}.nq.gz' --graphuri ${params.GraphUri}"
+        sh "docker run -t --rm --volumes-from ${params.JenkinsContainer} xml2rdf --inputfile '${params.InputFile}' --outputfile '${params.InputFile}.nq.gz' --graphuri ${params.GraphUri}"
       }
     }
 
     stage('RdfUpload') {
       steps {
-        sh "docker run -t --rm --volumes-from jenkins-translator rdf-upload -if '${params.InputFile}.nq.gz' -url '${params.TriplestoreUri}' -rep '${params.TriplestoreRepository}' -un '${params.TriplestoreUsername}' -pw '${params.TriplestorePassword}'"
+        sh "docker run -t --rm --volumes-from ${params.JenkinsContainer} rdf-upload -if '${params.InputFile}.nq.gz' -url '${params.TriplestoreUri}' -rep '${params.TriplestoreRepository}' -un '${params.TriplestoreUsername}' -pw '${params.TriplestorePassword}'"
       }
     }
 
