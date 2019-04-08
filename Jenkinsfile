@@ -15,7 +15,7 @@ pipeline {
 		stage('KGX checkout') {
 			steps {
 				sh "cd $WORKSPACE"
-				sh "pip3.7 install git+https://github.com/NCATS-Tangerine/kgx"
+				sh "pip3.7 install git+https://github.com/NCATS-Tangerine/kgx@validate"
 				script {
 					if (!fileExists('$WORKSPACE/data')) {
 						sh "mkdir -p $WORKSPACE/data"
