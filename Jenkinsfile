@@ -26,6 +26,15 @@ pipeline {
 				}
 			}
 		}
+		stage('Last stage') {
+			steps {
+				sh "python --version"
+				sh "kgx --version"
+				sh "which python"
+				sh "which kgx"
+				sh "kgx validate db.csv.tar -o test"
+			}
+		}
 		stage('Data download') {
 			steps {
 				sh "ls db.csv.tar || kgx neo4j-download -a http://scigraph.ncats.io -u neo4j -p ${env.NEO4J_PASS} -o db.csv"
