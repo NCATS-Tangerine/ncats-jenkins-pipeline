@@ -33,7 +33,7 @@ pipeline {
 		}
 		stage('Last stage') {
 			steps {
-				sh "kgx validate db.csv -o test"
+				sh "kgx validate db.csv.tar -o test"
 			}
 		}
 	}
