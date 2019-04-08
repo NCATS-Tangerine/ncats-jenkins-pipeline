@@ -28,7 +28,7 @@ pipeline {
 		}
 		stage('Data download') {
 			steps {
-				sh "kgx neo4j-download -a http://scigraph.ncats.io -u neo4j -p ${env.NEO4J_PASS} -o db.csv"
+				sh "ls db.csv.tar || kgx neo4j-download -a http://scigraph.ncats.io -u neo4j -p ${env.NEO4J_PASS} -o db.csv"
 			}
 		}
 		stage('Last stage') {
