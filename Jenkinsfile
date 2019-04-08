@@ -26,7 +26,7 @@ pipeline {
 				}
 			}
 		}
-		stage('Last stage') {
+		stage('Checking versions and validating') {
 			steps {
 				sh "python --version"
 				sh "kgx --version"
