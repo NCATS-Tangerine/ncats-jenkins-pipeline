@@ -20,12 +20,12 @@ pipeline {
 		}
 		stage('Data download') {
 			steps {
-				sh "ls db.csv || kgx neo4j-download -a http://robokopdb2.renci.org:7474 -u neo4j -p ${env.NEO4J_PASS} -o db.csv"
+				sh "ls db.csv.tar || kgx neo4j-download -a http://robokopdb2.renci.org:7474 -u neo4j -p ${env.NEO4J_PASS} -o db.csv"
 			}
 		}
 		stage('Validate') {
 			steps {
-				sh "kgx validate db.csv -o test"
+				sh "kgx validate db.csv.tar -o test"
 			}
 		}
 	}
