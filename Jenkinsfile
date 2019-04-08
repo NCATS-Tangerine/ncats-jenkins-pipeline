@@ -16,31 +16,14 @@ pipeline {
 			steps {
 				sh "cd $WORKSPACE"
 				sh "pip3.7 install git+https://github.com/NCATS-Tangerine/kgx@validate"
-				script {
-					if (!fileExists('$WORKSPACE/data')) {
-						sh "mkdir -p $WORKSPACE/data"
-					}
-					if (!fileExists('$WORKSPACE/results')) {
-						sh "mkdir -p $WORKSPACE/results"
-					}
-				}
-			}
-		}
-		stage('Checking versions and validating') {
-			steps {
-				sh "python --version"
-				sh "kgx --version"
-				sh "which python"
-				sh "which kgx"
-				sh "kgx validate db.csv.tar -o test"
 			}
 		}
 		stage('Data download') {
 			steps {
-				sh "ls db.csv.tar || kgx neo4j-download -a http://scigraph.ncats.io -u neo4j -p ${env.NEO4J_PASS} -o db.csv"
+				sh "kgx neo4j-download -a http://scigraph.ncats.io -u neo4j -p ${env.NEO4J_PASS} -o db.csv"
 			}
 		}
-		stage('Last stage') {
+		stage('Validation') {
 			steps {
 				sh "kgx validate db.csv.tar -o test"
 			}
