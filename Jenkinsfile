@@ -4,7 +4,7 @@ pipeline {
 	environment {
 		KGX_GIT='https://github.com/NCATS-tangerine/kgx.git'
 		PYTHONPATH='$WORKSPACE/kgx'
-		NEO4J_PASS = credentials('neo4j_pass')
+		NEO4J_PASS = credentials('robokopdb2_pass')
 	}
 	options {
 		// using the timestamps plugin we can add timestamps to the console log
@@ -28,12 +28,12 @@ pipeline {
 		}
 		stage('Data download') {
 			steps {
-				sh "kgx neo4j-download -a http://34.229.55.225:7474 -u neo4j -p ${env.NEO4J_PASS} -o semmeddb.csv"
+				sh "kgx neo4j-download -a http://robokopdb2.renci.org:7474 -u neo4j -p ${env.NEO4J_PASS} -o db.csv"
 			}
 		}
 		stage('Last stage') {
 			steps {
-				sh "kgx validate semmeddb.csv -o test"
+				sh "kgx validate db.csv -o test"
 			}
 		}
 	}
