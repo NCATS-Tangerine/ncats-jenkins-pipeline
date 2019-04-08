@@ -18,10 +18,10 @@ pipeline {
 				sh "pip3.7 install git+https://github.com/NCATS-Tangerine/kgx"
 				script {
 					if (!fileExists('$WORKSPACE/data')) {
-						sh "mkdir $WORKSPACE/data"
+						sh "mkdir -p $WORKSPACE/data"
 					}
 					if (!fileExists('$WORKSPACE/results')) {
-						sh "mkdir $WORKSPACE/results"
+						sh "mkdir -p $WORKSPACE/results"
 					}
 				}
 			}
