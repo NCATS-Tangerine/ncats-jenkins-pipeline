@@ -4,7 +4,7 @@ pipeline {
 	environment {
 		KGX_GIT='https://github.com/NCATS-tangerine/kgx.git'
 		PYTHONPATH='$WORKSPACE/kgx'
-		NEO4J_PASS = credentials('steveneo4j_pass')
+		NEO4J_PASS = credentials('scigraph_pass')
 	}
 	options {
 		// using the timestamps plugin we can add timestamps to the console log
@@ -28,7 +28,7 @@ pipeline {
 		}
 		stage('Data download') {
 			steps {
-				sh "kgx neo4j-download -a http://steveneo4j.saramsey.org:7474 -u neo4j -p ${env.NEO4J_PASS} -o db.csv"
+				sh "kgx neo4j-download -a http://scigraph.ncats.io -u neo4j -p ${env.NEO4J_PASS} -o db.csv"
 			}
 		}
 		stage('Last stage') {
