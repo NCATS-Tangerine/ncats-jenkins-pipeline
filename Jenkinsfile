@@ -25,7 +25,7 @@ pipeline {
 		}
 		stage('Validation') {
 			steps {
-				sh "kgx validate semmeddb.csv.tar -o test"
+				sh "kgx validate semmeddb.csv.tar -o test_results"
 			}
 		}
 	}
@@ -33,7 +33,7 @@ pipeline {
 	post {
 		always {
 			// archive contents in results folder, only if the build is successful
-			archiveArtifacts artifacts: 'test/*', onlyIfSuccessful: true
+			archiveArtifacts artifacts: 'test_results', onlyIfSuccessful: true
 
 			// delete all created directories
 			//deleteDir()
