@@ -25,7 +25,7 @@ pipeline {
 		}
 		stage('Validate') {
 			steps {
-				sh "kgx validate db.csv.tar -o test_results"
+				sh "kgx validate db.csv.tar -o test_results/master.log -d test_results"
 			}
 		}
 	}
