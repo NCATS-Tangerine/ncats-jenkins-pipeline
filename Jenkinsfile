@@ -20,7 +20,7 @@ pipeline {
 		}
 		stage('Data download') {
 			steps {
-				sh "ls db.csv.tar || kgx neo4j-download -a http://steveneo4j.saramsey.org:7474 -u neo4j -p ${env.NEO4J_PASS} -o db.csv"
+				sh "ls db.csv.tar || kgx neo4j-download -a http://tkg.ncats.io -o db.csv"
 			}
 		}
 		stage('Validate') {
