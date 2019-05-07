@@ -20,7 +20,7 @@ pipeline {
 		}
 		stage('Data download') {
 			steps {
-				sh "ls db.csv.tar || kgx neo4j-download -a http://tkg.ncats.io -o db.csv"
+				sh "ls db.csv.tar || kgx neo4j-download -a http://tkg-1.ncats.io -o db.csv"
 			}
 		}
 		stage('Validate') {
