@@ -14,6 +14,7 @@ pipeline {
 		stage('KGX checkout') {
 			steps {
 				sh "cd $WORKSPACE"
+				sh "python3.7 -m venv env && env/bin/activate"
 				sh "pip3.7 install git+https://github.com/NCATS-Tangerine/kgx"
 				script {
 					if (!fileExists('$WORKSPACE/data')) {
